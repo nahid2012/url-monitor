@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -24,6 +24,42 @@
     <ul id="linksList"></ul>
     <button id="logoutBtn">Logout</button>
   </div>
+
+  <script src="app.js"></script>
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>URL Monitor Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <h1>🔍 URL Monitor</h1>
+  <button id="logoutBtn" style="float:right;">Logout</button>
+
+  <form id="addForm">
+    <input type="url" id="urlInput" placeholder="https://example.com" required>
+    <button type="submit">Add URL</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>URL</th>
+        <th>Status</th>
+        <th>Last Checked</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="urlList"></tbody>
+  </table>
 
   <script src="app.js"></script>
 </body>
