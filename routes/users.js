@@ -7,19 +7,20 @@ const auth = require('../middlewares/auth');
 const router = express.Router();
 
 // Create user
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { name, phone, password } = req.body;
   if (!name || !phone || !password) return res.status(400).json({ error: 'Missing fields' });
 
-  const users = read('users');
+  const users = await read('users');
   if (users.find(u => u.phone === phone)) return res.status(400).json({ error: 'User exists' });
 
-  const hashed = bcrypt.hashSync(password, 8);
+  const hashed = await bcrypt.hash(password, 8);
   const user = { id: uuidv4(), name, phone, password: hashed };
   users.push(user);
-  write('users', users);
+  await write('users', users);
   res.json({ message: 'User created', userId: user.id });
 });
+
 
 // Delete user
 router.delete('/:id', auth, (req, res) => {

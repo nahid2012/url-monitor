@@ -1,19 +1,25 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 
 const usersRoute = require('./routes/users');
 const authRoute = require('./routes/auth');
 const linksRoute = require('./routes/links');
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
+
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRoute);
 app.use('/auth', authRoute);
 app.use('/links', linksRoute);
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+// Global error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal server error' });
+});
 
 
-const path = require('path');
-app.use(express.static(path.join(__dirname, 'public')));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
