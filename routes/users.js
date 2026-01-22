@@ -6,6 +6,13 @@ const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
+// Get logged-in user profile
+router.get('/me', auth, (req, res) => {
+  const { password, ...safeUser } = req.user; // hide password
+  res.json({ user: safeUser });
+});
+
+
 // Create user
 router.post('/', async (req, res) => {
   const { name, phone, password } = req.body;
@@ -23,12 +30,12 @@ router.post('/', async (req, res) => {
 
 
 // Delete user
-router.delete('/:id', auth, (req, res) => {
-  let users = read('users');
+router.delete('/:id', auth, async (req, res) => {
+  let users = await read('users');
   const index = users.findIndex(u => u.id === req.params.id);
   if (index === -1) return res.status(404).json({ error: 'User not found' });
   users.splice(index, 1);
-  write('users', users);
+  await write('users', users);
   res.json({ message: 'User deleted' });
 });
 

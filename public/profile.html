@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Profile | URL Monitor</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <nav>
+    <a href="/dashboard.html" class="link-button">⬅ Dashboard</a>
+  </nav>
+
+  <main class="centered">
+    <h2>Your Account</h2>
+
+    <p><strong>Name:</strong> <span id="name"></span></p>
+    <p><strong>Phone:</strong> <span id="phone"></span></p>
+
+    <button id="deleteAccount" class="danger">
+      ❌ Delete My Account
+    </button>
+
+    <p id="message"></p>
+  </main>
+
+  <script src="./auth.js"></script>
+  <script>
+    (async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login.html';
+        return;
+      }
+
+      const res = await fetch('/users/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) {
+        localStorage.removeItem('token');
+        window.location.href = '/login.html';
+        return;
+      }
+
+      const data = await res.json();
+
+      if (!data.user) {
+        throw new Error('User data missing');
+      }
+
+      document.getElementById('name').textContent = data.user?.name || 'Unknown User';
+      document.getElementById('phone').textContent = data.user.phone;
+
+      document.getElementById('deleteAccount').onclick = async () => {
+        if (!confirm('This will delete your account permanently. Continue?')) return;
+
+        const res = await fetch(`/users/${data.user.id}`, {
+          method: 'DELETE',
+          headers: authHeaders()
+        });
+
+        if (res.ok) {
+          localStorage.clear();
+          window.location.href = '/index.html';
+        } else {
+          document.getElementById('message').textContent = 'Failed to delete account';
+        }
+      };
+    })();
+  </script>
+
+</body>
+
+</html>

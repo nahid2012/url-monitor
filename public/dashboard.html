@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | URL Monitor</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <nav>
+    <span>🔍 URL Monitor</span>
+    <div>
+      <a href="/profile.html" class="link-button">Profile</a>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </nav>
+
+  <main>
+    <h2>Your URLs</h2>
+
+    <form id="addForm">
+      <input type="url" id="urlInput" placeholder="https://example.com" required>
+      <button type="submit">Add</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>URL</th>
+          <th>Status</th>
+          <th>Last Checked</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="urlList"></tbody>
+    </table>
+  </main>
+
+  <script src="/auth.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
